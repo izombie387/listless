@@ -1,6 +1,6 @@
 extends PanelContainer
 class_name Element
-enum Type {NONE, NUMBER, FUNCTION, HIGHER_FUNC,}
+enum Type {NONE, NUMBER, FUNCTION, HIGHER_FUNC, DISPLAY}
 signal dropped_on(from_idx, to_idx)
 @export var label: Label
 var index = -1

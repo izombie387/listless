@@ -6,17 +6,19 @@ var step = 0
 const LENGTH = 8
 static var array: Array = [] # int
 static var current_test = "bubble_sort"
+static var accum: Variant = 0
 static var tests = {
 	"bubble_sort": {
-		"can_drop": 
+		"can_drop":
 (func(from_data, to_data):
 	return abs(from_data["index"] - to_data["index"]) == 1),
 		"min_moves": get_min_moves_bubble_sort,
 		"functions": {},
 	},
 	"insertion_sort":{},
+	
+## MAP
 	"map":{
-		
 		"can_drop": 
 (func(from_data, _to_data):
 	return from_data["type"] == Element.Type.FUNCTION),
@@ -29,12 +31,8 @@ static var tests = {
 					from_data["f"].call(array[to_data["index"]])
 		Element.Type.HIGHER_FUNC: # map
 			array = array.map(from_data["f"])
-		_:
-			return
 ),
-
-		"min_moves": func(): return LENGTH,
-		"test": Callable(func():return),
+		"min_moves": func(): return -1,
 		"functions": {
 			"(+1)": {
 				"type": Element.Type.FUNCTION,
@@ -50,15 +48,80 @@ static var tests = {
 			},
 		},
 	},
-	"fold":{},
-	"filter":{},
+	
+## FOLD
+	"fold":{
+		"can_drop": 
+(func(from_data, _to_data):
+	return from_data["type"] == Element.Type.FUNCTION),
+	
+		"drop_data":
+(func(from_data, to_data):
+	match to_data["type"]:
+		Element.Type.NUMBER:
+			accum = from_data["f"].call(0, array[to_data["index"]])
+		Element.Type.HIGHER_FUNC: # map
+			accum = array.reduce(from_data["f"], 0)
+),
+		"min_moves": func(): return -1,
+		"display": "total",
+		"functions": {
+			"isEven": {
+				"type": Element.Type.FUNCTION,
+				"f": func(acc, c): return acc + int((c%2)==0),
+			},
+			"isOdd": {
+				"type": Element.Type.FUNCTION,
+				"f": func(acc, c): return acc + int((c%2)!=0),
+			},
+			"fold": {
+				"type": Element.Type.HIGHER_FUNC,
+				"f": Callable(), # empty, defined above
+			},
+		},
+	},
+	
+## FILTER
+	"filter":{
+		"can_drop": 
+(func(from_data, _to_data):
+	return from_data["type"] == Element.Type.FUNCTION),
+	
+		"drop_data":
+(func(from_data, to_data):
+	match to_data["type"]:
+		Element.Type.NUMBER:
+			accum = from_data["f"].call(array[to_data["index"]])
+		Element.Type.HIGHER_FUNC: # map
+			accum = array.filter(from_data["f"])
+),
+		"min_moves": func(): return -1,
+		"display": "total",
+		"functions": {
+			"isEven": {
+				"type": Element.Type.FUNCTION,
+				"f": func(c): return (c%2)==0,
+			},
+			"isOdd": {
+				"type": Element.Type.FUNCTION,
+				"f": func(c): return (c%2)!=0,
+			},
+			"filter": {
+				"type": Element.Type.HIGHER_FUNC,
+				"f": Callable(), # empty, defined above
+			},
+		},
+	},
 }
 
 static func get_funcs():
-	return tests[current_test]["functions"]
+	return tests[current_test].get("functions")
 
+static func get_display():
+	return tests[current_test].get("display")
 
 static func set_lesson(lesson_index):
+	accum = 0
 	current_test = tests.keys()[lesson_index]
 	print("Current test: ", current_test)
 

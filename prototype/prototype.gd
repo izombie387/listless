@@ -5,9 +5,11 @@ extends Control
 @export var min_moves_label: Label
 @export var functions: HBoxContainer
 @export var lessons_menu: OptionButton
+@export var buttons: MarginContainer
 @onready var tree: = get_tree()
 const LENGTH = 8
 
+var display: Element = null
 var element_scene = load("res://prototype/element.tscn")
 var moves: int = 0 :
 	set(v):
@@ -16,6 +18,7 @@ var moves: int = 0 :
 
 
 func _ready() -> void:
+	buttons.update_request.connect(update_values)
 	var array = Logic.randomize_array()
 	for i in Logic.LENGTH:
 		add_number(array[i], i)
@@ -33,9 +36,16 @@ func on_lesson_selected(lesson_index):
 	Logic.set_lesson(lesson_index)
 	functions.get_children().map(func(c): c.queue_free())
 	var new_funcs = Logic.get_funcs()
+	if not new_funcs: 
+		return
 	for f_name in new_funcs.keys():
 		var details = new_funcs[f_name]
 		add_function(f_name, details["type"], details["f"])
+	var display_name = Logic.get_display()
+	if display_name:
+		display = add_function(display_name, Element.Type.DISPLAY, Callable())
+	else:
+		display = null
 	update_values()
 
 		
@@ -48,16 +58,20 @@ func update_values():
 	var elements = grid.get_children()
 	for i in LENGTH:
 		elements[i].update_value(Logic.array[i])
+	if display:
+		display.update_text(str(
+				"Result: ", Logic.accum))
 		
 		
-func add_function(f_name: String, type: Element.Type, f: Callable):
+func add_function(
+		f_name: String, type: Element.Type, f: Callable) -> Node:
 	var new_element = element_scene.instantiate()
 	new_element.update_text(f_name)
 	new_element.type = type
 	new_element.f = f
 	new_element.dropped_on.connect(on_dropped_on)
 	functions.add_child(new_element)
-	
+	return new_element
 
 		
 func add_number(value: int, index: int):

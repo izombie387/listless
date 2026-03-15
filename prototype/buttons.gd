@@ -1,13 +1,21 @@
 extends MarginContainer
 
+signal update_request()
 @onready var tree = get_tree()
 @export var grid: GridContainer
 @export var reset: Button
+@export var randomize_btn: Button
+
 
 @onready var buttons = {
 	reset: {
 		"action": func(): tree.reload_current_scene(),
 	},
+	randomize_btn: {
+		"action": func(): 
+			Logic.randomize_array()
+			update_request.emit()
+			}
 }
 
 
