@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dc6bo3s1g5x38"]
+
+[ext_resource type="Texture2D" uid="uid://nb8vdpc7y6cl" path="res://aseprite/gromlin.png" id="1_2mvqj"]
+[ext_resource type="Script" uid="uid://bktidd7paxvok" path="res://enemy/enemy.gd" id="2_ofsxj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofsxj"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.4117647)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ofsxj"]
+size = Vector2(31, 31)
+
+[node name="Enemy" type="Sprite2D" unique_id=1903256885 node_paths=PackedStringArray("number_label", "area")]
+texture = ExtResource("1_2mvqj")
+script = ExtResource("2_ofsxj")
+number_label = NodePath("NumberContainer/NumberLabel")
+area = NodePath("Area")
+
+[node name="NumberContainer" type="PanelContainer" parent="." unique_id=411208763]
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 13.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ofsxj")
+
+[node name="NumberLabel" type="Label" parent="NumberContainer" unique_id=119295384]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 10
+text = "1"
+
+[node name="Area" type="Area2D" parent="." unique_id=327712352]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Area" unique_id=1302273014]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_ofsxj")

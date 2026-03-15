@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://cx40ymcaikbfi"]
+
+[ext_resource type="Script" uid="uid://cfowv3y7q3yuf" path="res://prototype/prototype.gd" id="1_y8ajs"]
+[ext_resource type="Script" uid="uid://ckdggpcbqr3jj" path="res://prototype/buttons.gd" id="2_24a28"]
+
+[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("grid", "moves_label", "min_moves_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y8ajs")
+grid = NodePath("VBoxContainer/Margin/Grid")
+moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel/MovesLabel")
+min_moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel2/MinMovesLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1362829182]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="VBoxContainer" unique_id=1567201755]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/Margin" unique_id=464510227]
+layout_mode = 2
+columns = 8
+
+[node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100 node_paths=PackedStringArray("grid", "reset")]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("2_24a28")
+grid = NodePath("Grid")
+reset = NodePath("Grid/Reset")
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/Buttons" unique_id=2068786280]
+layout_mode = 2
+columns = 8
+
+[node name="Reset" type="Button" parent="VBoxContainer/Buttons/Grid" unique_id=650136882]
+layout_mode = 2
+text = "Reset"
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer/Buttons/Grid" unique_id=563531311]
+layout_mode = 2
+
+[node name="MovesLabel" type="Label" parent="VBoxContainer/Buttons/Grid/Panel" unique_id=323257839]
+layout_mode = 2
+text = "Moves: 0"
+
+[node name="Panel2" type="PanelContainer" parent="VBoxContainer/Buttons/Grid" unique_id=1195557182]
+layout_mode = 2
+
+[node name="MinMovesLabel" type="Label" parent="VBoxContainer/Buttons/Grid/Panel2" unique_id=136474150]
+layout_mode = 2
+text = "Min moves possible: -"
+
+[node name="MenuButton" type="OptionButton" parent="VBoxContainer/Buttons/Grid" unique_id=1679054755]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Bubble Sort"
+popup/item_0/id = 0
+popup/item_1/text = "Insertion Sort"
+popup/item_1/id = 1
