@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cfowv3y7q3yuf" path="res://prototype/prototype.gd" id="1_y8ajs"]
 [ext_resource type="Script" uid="uid://ckdggpcbqr3jj" path="res://prototype/buttons.gd" id="2_24a28"]
 
-[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("grid", "moves_label", "min_moves_label", "functions", "lessons_menu", "buttons")]
+[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("rules", "grid", "moves_label", "min_moves_label", "functions", "lessons_menu", "buttons")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,10 +11,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_y8ajs")
+rules = NodePath("VBoxContainer/Margin2/Middle/PanelContainer/Rules")
 grid = NodePath("VBoxContainer/Margin/Grid")
 moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel/MovesLabel")
 min_moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel2/MinMovesLabel")
-functions = NodePath("VBoxContainer/Margin2/Functions")
+functions = NodePath("VBoxContainer/Margin2/Middle/Functions")
 lessons_menu = NodePath("VBoxContainer/Buttons/Grid/LessonsMenu")
 buttons = NodePath("VBoxContainer/Buttons")
 
@@ -45,10 +46,20 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Functions" type="HBoxContainer" parent="VBoxContainer/Margin2" unique_id=109917417]
+[node name="Middle" type="HBoxContainer" parent="VBoxContainer/Margin2" unique_id=1519974572]
 layout_mode = 2
 
-[node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100 node_paths=PackedStringArray("grid", "reset")]
+[node name="Functions" type="HBoxContainer" parent="VBoxContainer/Margin2/Middle" unique_id=109917417]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Margin2/Middle" unique_id=1345744720]
+layout_mode = 2
+
+[node name="Rules" type="Label" parent="VBoxContainer/Margin2/Middle/PanelContainer" unique_id=2013867177]
+layout_mode = 2
+text = "Rules: ..."
+
+[node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100 node_paths=PackedStringArray("grid", "reset", "randomize_btn")]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
@@ -59,6 +70,7 @@ theme_override_constants/margin_bottom = 16
 script = ExtResource("2_24a28")
 grid = NodePath("Grid")
 reset = NodePath("Grid/Reset")
+randomize_btn = NodePath("Grid/Randomize")
 
 [node name="Grid" type="GridContainer" parent="VBoxContainer/Buttons" unique_id=2068786280]
 layout_mode = 2
@@ -80,6 +92,7 @@ layout_mode = 2
 text = "Moves: 0"
 
 [node name="Panel2" type="PanelContainer" parent="VBoxContainer/Buttons/Grid" unique_id=1195557182]
+visible = false
 layout_mode = 2
 
 [node name="MinMovesLabel" type="Label" parent="VBoxContainer/Buttons/Grid/Panel2" unique_id=136474150]

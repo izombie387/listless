@@ -1,5 +1,6 @@
 extends Control
 
+@export var rules: Label
 @export var grid: HBoxContainer
 @export var moves_label: Label
 @export var min_moves_label: Label
@@ -30,10 +31,12 @@ func _ready() -> void:
 	lessons_menu.clear()
 	for lesson_name in Logic.tests.keys():
 		lessons_menu.add_item(lesson_name.capitalize())
-		
+	on_lesson_selected(0) # first lesson: bubble sort
+	
 		
 func on_lesson_selected(lesson_index):
 	Logic.set_lesson(lesson_index)
+	moves = 0
 	functions.get_children().map(func(c): c.queue_free())
 	var new_funcs = Logic.get_funcs()
 	if not new_funcs: 
@@ -46,6 +49,7 @@ func on_lesson_selected(lesson_index):
 		display = add_function(display_name, Element.Type.DISPLAY, Callable())
 	else:
 		display = null
+	rules.text = Logic.get_rules()
 	update_values()
 
 		

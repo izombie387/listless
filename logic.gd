@@ -9,16 +9,25 @@ static var current_test = "bubble_sort"
 static var accum: Variant = 0
 static var tests = {
 	"bubble_sort": {
+		"rules": 
+"""Swap ajacent numbers by dragging and dropping.
+Sort the from lowest to highest, left to right.""",
 		"can_drop":
 (func(from_data, to_data):
 	return abs(from_data["index"] - to_data["index"]) == 1),
+		"drop_data":
+			(func(from_data, to_data): 
+				swap(from_data["index"], to_data["index"])),
 		"min_moves": get_min_moves_bubble_sort,
 		"functions": {},
 	},
-	"insertion_sort":{},
+	#"insertion_sort":{},
 	
 ## MAP
 	"map":{
+		"rules": 
+"""Drag a function on a number to change it's value.
+Drag a function onto map to apply it to all elements""",
 		"can_drop": 
 (func(from_data, _to_data):
 	return from_data["type"] == Element.Type.FUNCTION),
@@ -51,6 +60,10 @@ static var tests = {
 	
 ## FOLD
 	"fold":{
+		"rules": 
+"""Drag a function on a number to get it's value. 
+(Odd = 0, Even = 1). Drag a function onto fold to apply
+the function to each array element adding each result""",
 		"can_drop": 
 (func(from_data, _to_data):
 	return from_data["type"] == Element.Type.FUNCTION),
@@ -83,6 +96,10 @@ static var tests = {
 	
 ## FILTER
 	"filter":{
+		"rules": 
+"""Drag a function on a number to get it's value. 
+(True or False). Drag a function onto filter to get
+only the numbers that are true for that function""",
 		"can_drop": 
 (func(from_data, _to_data):
 	return from_data["type"] == Element.Type.FUNCTION),
@@ -128,6 +145,10 @@ static func set_lesson(lesson_index):
 
 static func get_min_moves() -> int:
 	return tests[current_test]["min_moves"].call()
+
+
+static func get_rules() -> String:
+	return tests[current_test].get("rules", "")
 
 
 static func _static_init() -> void:
