@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://cx40ymcaikbfi"]
 
 [ext_resource type="Script" uid="uid://cfowv3y7q3yuf" path="res://prototype/prototype.gd" id="1_y8ajs"]
-[ext_resource type="Script" uid="uid://ckdggpcbqr3jj" path="res://prototype/buttons.gd" id="2_24a28"]
 
-[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("rules", "grid", "moves_label", "min_moves_label", "functions", "lessons_menu", "buttons")]
+[sub_resource type="LabelSettings" id="LabelSettings_y8ajs"]
+font_size = 14
+
+[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("rules", "grid", "moves_label", "min_moves_label", "reset_button", "randomize_button", "next_lesson_button", "functions", "lessons_menu")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,9 +17,11 @@ rules = NodePath("VBoxContainer/Margin2/Middle/PanelContainer/Rules")
 grid = NodePath("VBoxContainer/Margin/Grid")
 moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel/MovesLabel")
 min_moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel2/MinMovesLabel")
+reset_button = NodePath("VBoxContainer/Buttons/Grid/Reset")
+randomize_button = NodePath("VBoxContainer/Buttons/Grid/Randomize")
+next_lesson_button = NodePath("VBoxContainer/Buttons/Grid/NextLesson")
 functions = NodePath("VBoxContainer/Margin2/Middle/Functions")
 lessons_menu = NodePath("VBoxContainer/Buttons/Grid/LessonsMenu")
-buttons = NodePath("VBoxContainer/Buttons")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1362829182]
 layout_mode = 1
@@ -30,10 +34,10 @@ grow_vertical = 2
 [node name="Margin" type="MarginContainer" parent="VBoxContainer" unique_id=1567201755]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="Grid" type="HBoxContainer" parent="VBoxContainer/Margin" unique_id=1327367201]
 layout_mode = 2
@@ -41,10 +45,10 @@ layout_mode = 2
 [node name="Margin2" type="MarginContainer" parent="VBoxContainer" unique_id=1885692753]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="Middle" type="HBoxContainer" parent="VBoxContainer/Margin2" unique_id=1519974572]
 layout_mode = 2
@@ -58,19 +62,16 @@ layout_mode = 2
 [node name="Rules" type="Label" parent="VBoxContainer/Margin2/Middle/PanelContainer" unique_id=2013867177]
 layout_mode = 2
 text = "Rules: ..."
+label_settings = SubResource("LabelSettings_y8ajs")
 
-[node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100 node_paths=PackedStringArray("grid", "reset", "randomize_btn")]
+[node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-script = ExtResource("2_24a28")
-grid = NodePath("Grid")
-reset = NodePath("Grid/Reset")
-randomize_btn = NodePath("Grid/Randomize")
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="Grid" type="GridContainer" parent="VBoxContainer/Buttons" unique_id=2068786280]
 layout_mode = 2
@@ -105,3 +106,8 @@ selected = 0
 item_count = 1
 popup/item_0/text = "Select Lesson"
 popup/item_0/id = 0
+
+[node name="NextLesson" type="Button" parent="VBoxContainer/Buttons/Grid" unique_id=1106244106]
+layout_mode = 2
+disabled = true
+text = "Next Lesson"

@@ -4,12 +4,17 @@ extends Control
 @export var grid: HBoxContainer
 @export var moves_label: Label
 @export var min_moves_label: Label
+@export var reset_button: Button
+@export var randomize_button: Button
+@export var next_lesson_button: Button
 @export var functions: HBoxContainer
 @export var lessons_menu: OptionButton
-@export var buttons: MarginContainer
 @onready var tree: = get_tree()
-const LENGTH = 8
 
+var current_lesson_index: = 0 :
+	set(v):
+		current_lesson_index = clamp(v, 0, Logic.tests.keys().size())
+		on_lesson_selected(current_lesson_index)
 var display: Element = null
 var element_scene = load("res://prototype/element.tscn")
 var moves: int = 0 :
@@ -18,8 +23,23 @@ var moves: int = 0 :
 		moves_label.text = str("Moves: ", moves)
 
 
+@onready var buttons = {
+	reset_button: {
+		"action": func(): tree.reload_current_scene(),
+	},
+	randomize_button: {
+		"action": func(): 
+			Logic.randomize_array()
+			update_values()
+			},
+	next_lesson_button: {
+		"action": func(): current_lesson_index += 1,
+	},
+}
+
 func _ready() -> void:
-	buttons.update_request.connect(update_values)
+	for button in buttons:
+		button.pressed.connect(on_button_clicked.bind(button))
 	var array = Logic.randomize_array()
 	for i in Logic.LENGTH:
 		add_number(array[i], i)
@@ -39,17 +59,17 @@ func on_lesson_selected(lesson_index):
 	moves = 0
 	functions.get_children().map(func(c): c.queue_free())
 	var new_funcs = Logic.get_funcs()
-	if not new_funcs: 
-		return
-	for f_name in new_funcs.keys():
-		var details = new_funcs[f_name]
-		add_function(f_name, details["type"], details["f"])
+	if new_funcs: 
+		for f_name in new_funcs.keys():
+			var details = new_funcs[f_name]
+			add_function(f_name, details["type"], details["f"])
 	var display_name = Logic.get_display()
 	if display_name:
 		display = add_function(display_name, Element.Type.DISPLAY, Callable())
 	else:
 		display = null
 	rules.text = Logic.get_rules()
+	Logic.randomize_array()
 	update_values()
 
 		
@@ -60,11 +80,19 @@ func on_dropped_on(_from_data, _to_data):
 
 func update_values():
 	var elements = grid.get_children()
-	for i in LENGTH:
+	for i in Logic.LENGTH:
 		elements[i].update_value(Logic.array[i])
 	if display:
-		display.update_text(str(
-				"Result: ", Logic.accum))
+		display.update_text(str("Result: ", Logic.accum))
+	check_win_condition()
+
+
+func check_win_condition():
+	if Logic.is_won():
+		print("Complete!")
+		next_lesson_button.disabled = false
+	else:
+		next_lesson_button.disabled = true
 		
 		
 func add_function(
@@ -85,5 +113,6 @@ func add_number(value: int, index: int):
 	new_element.type = Element.Type.NUMBER
 	new_element.dropped_on.connect(on_dropped_on)
 	grid.add_child(new_element)
-	
-	
+
+func on_button_clicked(button):
+	buttons[button]["action"].call()
