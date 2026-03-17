@@ -1,11 +1,15 @@
 extends PanelContainer
 class_name Element
-enum Type {NONE, NUMBER, FUNCTION, HIGHER_FUNC, DISPLAY}
+enum Type {
+	NONE, NUMBER, FUNCTION, DISPLAY, HIGHER_FUNC
+	## remove HIGHER_FUNC if we can
+}
 signal dropped_on(from_idx, to_idx)
 @export var label: Label
 var index = -1
 var type: = Type.NONE
-var f: Callable
+var f: Callable # to remove
+var f_object: Function = null
 
 
 func _drop_data(_at_position: Vector2, incoming_data: Variant) -> void:

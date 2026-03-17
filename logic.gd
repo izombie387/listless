@@ -176,7 +176,7 @@ static func set_lesson(lesson_index):
 	accum = 0
 	current_test = tests.keys()[lesson_index]
 	print("Current test: ", current_test)
-
+	
 
 static func get_min_moves() -> int:
 	return tests[current_test]["min_moves"].call()
