@@ -47,7 +47,7 @@ Goal: get an array with all 10s [10,10..] in the fewest moves""",
 		Element.Type.NUMBER:
 			array[to_data["index"]] =\
 					from_data["f"].call(array[to_data["index"]])
-		Element.Type.HIGHER_FUNC: # map
+		#Element.Type.HIGHER_FUNC: # map
 			array = array.map(from_data["f"])
 ),
 		"min_moves": func(): return -1,
@@ -61,7 +61,7 @@ Goal: get an array with all 10s [10,10..] in the fewest moves""",
 				"f": func(n): return n - 1,
 			},
 			"map": {
-				"type": Element.Type.HIGHER_FUNC,
+				#"type": Element.Type.HIGHER_FUNC,
 				"f": Callable(), # empty, defined above
 			},
 		},
@@ -84,7 +84,7 @@ Goal: get the total to at least 10""",
 	match to_data["type"]:
 		Element.Type.NUMBER:
 			accum += from_data["f"].call(0, array[to_data["index"]])
-		Element.Type.HIGHER_FUNC: # map
+		#Element.Type.HIGHER_FUNC: # map
 			accum += array.reduce(from_data["f"], 0)
 ),
 		"min_moves": func(): return -1,
@@ -99,7 +99,7 @@ Goal: get the total to at least 10""",
 				"f": func(acc, c): return acc + int((c%2)!=0),
 			},
 			"fold": {
-				"type": Element.Type.HIGHER_FUNC,
+				#"type": Element.Type.HIGHER_FUNC,
 				"f": Callable(), # empty, defined above
 			},
 		},
@@ -127,7 +127,7 @@ Goal: perform a filter that gets all of the elements at once""",
 						from_data["f"].call(array[to_data["index"]])
 			else:
 				accum = from_data["f"].call(array[to_data["index"]])
-		Element.Type.HIGHER_FUNC: # map
+		#Element.Type.HIGHER_FUNC: # map
 			accum = array.filter(from_data["f"])
 ),
 		"min_moves": func(): return -1,
@@ -147,7 +147,7 @@ Goal: perform a filter that gets all of the elements at once""",
 				"f": func(c): return c+1,
 			},
 			"filter": {
-				"type": Element.Type.HIGHER_FUNC,
+				#"type": Element.Type.HIGHER_FUNC,
 				"f": Callable(), # empty, defined above
 			},
 		},

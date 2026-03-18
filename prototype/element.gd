@@ -1,24 +1,33 @@
 extends PanelContainer
 class_name Element
-enum Type {
-	NONE, NUMBER, FUNCTION, DISPLAY, HIGHER_FUNC
-	## remove HIGHER_FUNC if we can
-}
-signal dropped_on(from_idx, to_idx)
+enum Type {NUMBER, FUNCTION, DISPLAY}
+signal dropped_on(from_element, to_element)
 @export var label: Label
 var index = -1
-var type: = Type.NONE
-var f: Callable # to remove
-var f_object: Function = null
+var type: Type
+var function: Function = null
 
 
-func _drop_data(_at_position: Vector2, incoming_data: Variant) -> void:
-	Logic.drop_data(incoming_data, get_my_data())
-	dropped_on.emit(incoming_data, get_my_data())
+func info():
+	return "\n".join([str(
+		Type.find_key(type),
+		function.info() if function else "",
+	)])
+
+func select(on: bool):
+	if on:
+		modulate = Color(0.337, 1.0, 0.314, 1.0)
+	else:
+		modulate = Color.WHITE
+
+
+func _drop_data(_at_position: Vector2, incoming_element: Variant) -> void:
+	Lesson.drop_data(incoming_element, self)
+	dropped_on.emit(incoming_element, self)
 	
 	
-func _can_drop_data(_at_position: Vector2, incoming_data: Variant) -> bool:
-	return Logic.can_drop(incoming_data, get_my_data())
+func _can_drop_data(_at_position: Vector2, incoming_element: Variant) -> bool:
+	return incoming_element.can_drop_to(self)
 
 
 func update_text(text: String):
@@ -27,16 +36,19 @@ func update_text(text: String):
 
 func update_value(new_val: int):
 	label.text = str(new_val)
-
+	
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	set_drag_preview(self.duplicate(true))
-	return get_my_data()
-
-
-func get_my_data():
-	return {
-		"type": type,
-		"index": index,
-		"f": f,
-	}
+	return self
+	
+	
+func can_drop_to(to_element: Element) -> bool:
+	match type:
+		Type.NUMBER:
+			match to_element.type:
+				Type.NUMBER:
+					return Lesson.can_drop_numbers(self, to_element)
+		Type.FUNCTION:
+			return function.can_drop_to(to_element)
+	return false
