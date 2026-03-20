@@ -3,7 +3,6 @@ extends Control
 @export var rules: Label
 @export var grid: HBoxContainer
 @export var moves_label: Label
-@export var min_moves_label: Label
 @export var reset_button: Button
 @export var randomize_button: Button
 @export var next_lesson_button: Button
@@ -43,15 +42,9 @@ func _ready() -> void:
 	var array = Lesson.randomize_array()
 	for i in Lesson.LENGTH:
 		add_number(array[i], i)
-	min_moves_label.text = str(
-			"Min moves possible: ",
-			Lesson.get_min_moves()
-	)
 	lessons_menu.item_selected.connect(on_lesson_selected)
 	lessons_menu.clear()
-	#for lesson_name in tests.keys():
-		#lessons_menu.add_item(lesson_name.capitalize())
-	on_lesson_selected(0) # first lesson: bubble sort
+	on_lesson_selected(0)
 	
 		
 func on_lesson_selected(lesson_index):

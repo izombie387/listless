@@ -1,51 +1,57 @@
 class_name Lesson
 
-static var name: = ""
-static var rules: = ""
-static var array: Array = [] # int
+static var name: = String()
+static var rules: = String()
+static var array: = Array()
+static var initial_array: = Array()
+static var target_array: = Array()
 static var accum: Variant = 0
-static var selected: Array = []
+static var selected: Array = Array()
 static var _win_condition: = Callable()
 static var _can_drop_numbers_call: = Callable()
-static var _min_moves: = Callable()
-static var _functions: Array = []
+static var _functions: = Array()
 const LENGTH = 4
 
 
 static func _static_init() -> void:
-	array.resize(LENGTH)
-	array.fill(-1)
+	randomize_array()
 	
 	
 static func load_lesson_by_name(lesson_name: String) -> Dictionary:
 	var data = Data.lesson_data.get(lesson_name)
 	if not data: print("invalid lesson name"); return {}
-	return load_lesson(
-		data["name"], data["rules"], data["win_condition"],
-		data["can_drop_numbers"], data["min_moves"], data["functions"],
+	accum = 0
+	selected = []
+	randomize_array()
+	if data["win_condition"].call() == true: # while loop if im careful
+		randomize_array()
+	return _load_lesson(
+		data["name"], 
+		data["rules"], 
+		data["win_condition"],
+		data["target_array"].call() if "target_array" in data else [],
+		data["can_drop_numbers"],
+		data["functions"],
 	)
 	
-static func load_lesson(
+static func _load_lesson(
 		_name: String,
 		_rules: String,
 		win_condition: Callable,
+		_target_array: Array,
 		can_drop_numbers_call: Callable,
-		min_moves: Callable,
 		functions: Array) -> Dictionary:
 	name = _name
 	rules = _rules
 	_win_condition = win_condition
+	target_array = _target_array
 	_can_drop_numbers_call = can_drop_numbers_call
-	#_drop_data_call = drop_data_call
-	_min_moves = min_moves
 	_functions = functions
-	
-	accum = 0
-	randomize_array()
-	print("Current test: ", name)
+	prints("Current test:", name)
 	return {
 		"rules": rules,
 		"functions": functions,
+		"target_array": target_array,
 	}
 	
 
@@ -68,13 +74,11 @@ static func get_functions():
 	return _functions
 
 
-static func get_min_moves() -> int:
-	return _min_moves.call()
-
-
 static func randomize_array():
+	array.resize(LENGTH) # incase we mutated/filtered the length
 	for i in LENGTH:
 		array[i] = randi_range(0,9)
+	initial_array = array.duplicate()
 	return array
 	
 		
@@ -104,8 +108,11 @@ static func call_lower(from: Function, to_idx: int):
 			array[to_idx] = from.f.call(array[to_idx])
 		Function.Operation.SELECT:
 			selected = from.f.call(array[to_idx])
-		Function.Operation.ACCUM:
-			accum += from.f.call(array[to_idx])
+		Function.Operation.BOOL:
+			# NB now just sets rather than adds to accum
+			accum = from.f.call(array[to_idx])
+		_:
+			print("no operaton type match for call_lower")
 
 
 static func call_higher(from: Function, to: Function):
@@ -115,7 +122,8 @@ static func call_higher(from: Function, to: Function):
 		Function.Operation.SELECT:
 			selected = to.f.call(array, from.f)
 		Function.Operation.ACCUM:
-			accum += to.f.call(array, from.f)
+			# NB setting not adding now
+			accum = to.f.call(array, from.f)
 	
 	
 static func _swap(from_idx, to_idx):

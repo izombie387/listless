@@ -16,9 +16,9 @@ func info():
 
 func select(on: bool):
 	if on:
-		modulate = Color(0.337, 1.0, 0.314, 1.0)
+		theme_type_variation = &"SelectedPanelContainer"
 	else:
-		modulate = Color.WHITE
+		theme_type_variation = &""
 
 
 func _drop_data(_at_position: Vector2, incoming_element: Variant) -> void:

@@ -3,37 +3,36 @@ extends Control
 @export var rules: Label
 @export var grid: HBoxContainer
 @export var moves_label: Label
-@export var min_moves_label: Label
 @export var reset_button: Button
 @export var randomize_button: Button
 @export var next_lesson_button: Button
 @export var functions: HBoxContainer
 @export var lessons_menu: OptionButton
-@export var display: Label
+@export var accum_label: Label
+@export var target_label: Label
 @onready var tree: = get_tree()
 var element_scene = load("res://prototype/element.tscn")
 var elements: Array[Element] = []
-var moves: int = 0 :
+var moves: int = 0:
 	set(v):
 		moves = v
 		moves_label.text = str("Moves: ", moves)
 @onready var buttons = {
 	reset_button: {
-		"action": func(): tree.reload_current_scene(),
+		"action":
+(func(): on_lesson_selected(current_lesson_index)),
 	},
-	randomize_button: {
-		"action": func(): 
-			Lesson.randomize_array()
-			update_ui()
-			},
 	next_lesson_button: {
-		"action": func(): current_lesson_index += 1,
+		"action":
+(func(): 
+	current_lesson_index += 1
+	lessons_menu.select(current_lesson_index)
+	on_lesson_selected(current_lesson_index)),
 	},
 }
 var current_lesson_index: = 0 :
 	set(v):
-		current_lesson_index = clamp(v, 0, lesson_names.size())
-		on_lesson_selected(current_lesson_index)
+		current_lesson_index = wrapi(v, 0, lesson_names.size())
 var lesson_names: = []
 		
 		
@@ -49,12 +48,21 @@ func _ready() -> void:
 		button.pressed.connect(on_button_clicked.bind(button))
 	for i in Lesson.LENGTH:
 		add_number(i)
-	current_lesson_index = 0 # load first lesson
+	current_lesson_index = 0
+	on_lesson_selected(current_lesson_index)
 	
 	
 func on_lesson_selected(lesson_index):
+	print("Lesson selected")
+	current_lesson_index = lesson_index
 	var ui_data = Lesson.load_lesson_by_name(lesson_names[lesson_index])
 	rules.text = ui_data["rules"]
+	var target_array = ui_data["target_array"]
+	if target_array != []:
+		target_label.text = str("Goal: ", target_array)
+		target_label.show()
+	else:
+		target_label.hide()
 	functions.get_children().map(func(c): c.queue_free())
 	var new_funcs = ui_data["functions"]
 	if new_funcs:
@@ -69,14 +77,14 @@ func update_ui():
 	for i in Lesson.LENGTH:
 		elements[i].update_value(Lesson.array[i])
 	prints("Selected:", Lesson.selected)
+	for i in Lesson.LENGTH:
+		elements[i].select(false)
 	for value in Lesson.selected:
-		for i in elements.size():
+		for i in Lesson.LENGTH:
 			if Lesson.array[i] == value:
 				elements[i].select(true)
 				continue
-			else:
-				elements[i].select(false)
-	display.text = (str("Result: ", Lesson.accum))
+	accum_label.text = (str("Result: ", Lesson.accum))
 	check_win_condition()
 
 
@@ -111,5 +119,6 @@ func on_button_clicked(button):
 	buttons[button]["action"].call()
 	
 	
-func on_dropped_on(from, to):
+func on_dropped_on(_from, _to):
+	moves += 1
 	update_ui()

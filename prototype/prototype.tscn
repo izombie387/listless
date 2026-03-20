@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cx40ymcaikbfi"]
 
-[ext_resource type="Script" uid="uid://5e748fpqxliy" path="res://temp/testing_classes.gd" id="1_y8ajs"]
+[ext_resource type="Script" uid="uid://5e748fpqxliy" path="res://temp/game.gd" id="1_y8ajs"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_y8ajs"]
 font_size = 14
 
-[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("rules", "grid", "moves_label", "min_moves_label", "reset_button", "randomize_button", "next_lesson_button", "functions", "lessons_menu", "display")]
+[node name="Prototype" type="Control" unique_id=527281854 node_paths=PackedStringArray("rules", "grid", "moves_label", "reset_button", "randomize_button", "next_lesson_button", "functions", "lessons_menu", "accum_label", "target_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,13 +16,13 @@ script = ExtResource("1_y8ajs")
 rules = NodePath("VBoxContainer/Margin/HBoxContainer/PanelContainer/Rules")
 grid = NodePath("VBoxContainer/Margin/HBoxContainer/Grid")
 moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel/MovesLabel")
-min_moves_label = NodePath("VBoxContainer/Buttons/Grid/Panel2/MinMovesLabel")
 reset_button = NodePath("VBoxContainer/Buttons/Grid/Reset")
-randomize_button = NodePath("VBoxContainer/Buttons/Grid/Randomize")
+randomize_button = NodePath("")
 next_lesson_button = NodePath("VBoxContainer/Buttons/Grid/NextLesson")
 functions = NodePath("VBoxContainer/Margin2/Middle/Functions")
 lessons_menu = NodePath("VBoxContainer/Buttons/Grid/LessonsMenu")
-display = NodePath("VBoxContainer/Margin2/Middle/PanelContainer2/Display")
+accum_label = NodePath("VBoxContainer/Margin2/Middle/PanelContainer2/Accum")
+target_label = NodePath("VBoxContainer/Margin2/Middle/PanelContainer3/Target")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1362829182]
 layout_mode = 1
@@ -71,9 +71,17 @@ layout_mode = 2
 [node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/Margin2/Middle" unique_id=1429579649]
 layout_mode = 2
 
-[node name="Display" type="Label" parent="VBoxContainer/Margin2/Middle/PanelContainer2" unique_id=1316736524]
+[node name="Accum" type="Label" parent="VBoxContainer/Margin2/Middle/PanelContainer2" unique_id=1316736524]
 layout_mode = 2
 text = "Result: ..."
+label_settings = SubResource("LabelSettings_y8ajs")
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/Margin2/Middle" unique_id=864266008]
+layout_mode = 2
+
+[node name="Target" type="Label" parent="VBoxContainer/Margin2/Middle/PanelContainer3" unique_id=1010185314]
+layout_mode = 2
+text = "Target: ..."
 label_settings = SubResource("LabelSettings_y8ajs")
 
 [node name="Buttons" type="MarginContainer" parent="VBoxContainer" unique_id=2055448100]
@@ -92,10 +100,6 @@ columns = 8
 [node name="Reset" type="Button" parent="VBoxContainer/Buttons/Grid" unique_id=650136882]
 layout_mode = 2
 text = "Reset"
-
-[node name="Randomize" type="Button" parent="VBoxContainer/Buttons/Grid" unique_id=19284254]
-layout_mode = 2
-text = "Randomize"
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer/Buttons/Grid" unique_id=563531311]
 layout_mode = 2

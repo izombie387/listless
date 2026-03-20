@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dxpwjrjptaxic"]
 
-[ext_resource type="Script" uid="uid://5e748fpqxliy" path="res://temp/testing_classes.gd" id="1_v0uvy"]
+[ext_resource type="Script" uid="uid://5e748fpqxliy" path="res://temp/game.gd" id="1_v0uvy"]
 
 [node name="Testing-Classes" type="Control" unique_id=593613276 node_paths=PackedStringArray("grid")]
 layout_mode = 3
